@@ -6,19 +6,42 @@
   "scripts": {
     "start": "live-server --port=3000 --open=/index.html",
     "dev": "live-server --port=3000 --open=/index.html --watch=css,js",
-    "serve": "http-server -p 8080 -o"
+    "clean": "rimraf dist && mkdirp dist",
+    "copy:html": "cp index.html dist/",
+    "copy:css": "cp -r css dist/",
+    "copy:js": "cp -r js dist/",
+    "copy:assets": "mkdir -p dist/assets && cp -r assets/* dist/assets/ 2>/dev/null || true",
+    "copy:all": "npm run copy:html && npm run copy:css && npm run copy:js && npm run copy:assets",
+    "minify:css": "cleancss -o dist/styles.min.css css/styles.css",
+    "minify:js": "terser js/app.js js/storage.js js/charts.js js/export.js -o dist/bundle.min.js -c -m",
+    "build": "npm run clean && npm run copy:all",
+    "build:prod": "npm run clean && npm run minify:css && npm run minify:js && npm run copy:html && npm run copy:js",
+    "test": "echo 'No tests configured yet'",
+    "serve": "http-server dist -p 8080 -o"
   },
   "keywords": [
     "expense-tracker",
     "finance",
     "budget",
     "money-management",
-    "personal-finance"
+    "personal-finance",
+    "expense-manager"
   ],
-  "author": "Your Name",
+  "author": "Kriss",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JOhnSm1th-aqq/Expense-Tracker.git"
+  },
   "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "http-server": "^14.1.1",
     "live-server": "^1.2.2",
-    "http-server": "^14.1.1"
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.5",
+    "terser": "^5.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
